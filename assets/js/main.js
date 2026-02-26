@@ -92,3 +92,45 @@ heroScroll.addEventListener("click", function () {
     });
   }
 });
+
+// Active navlink on scroll
+const sections = document.querySelectorAll("section[id]");
+
+function highlightNavOnScroll() {
+  const scrollY = window.pageYOffset;
+
+  sections.forEach((section) => {
+    const sectionHeight = section.offsetHeight;
+    const sectionTop = section.offsetTop - 150;
+    const sectionId = section.getAttribute("id");
+    const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+
+    if (navLink) {
+      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+        // Remove active class from all navlinks
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          link.classList.remove("active");
+        });
+        // Add active class to current section's navlink
+        navLink.classList.add("active");
+      }
+    }
+  });
+
+  // Special case: If at the very top (before first section), highlight Home
+  if (scrollY < 100) {
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      link.classList.remove("active");
+    });
+    const homeLink = document.querySelector('.nav-link[href="#home"]');
+    if (homeLink) {
+      homeLink.classList.add("active");
+    }
+  }
+}
+
+// Run on scroll
+window.addEventListener("scroll", highlightNavOnScroll);
+
+// Run on page load to set initial active state
+document.addEventListener("DOMContentLoaded", highlightNavOnScroll);
